@@ -1,0 +1,53 @@
+# Build outputs
+bin/
+obj/
+[Bb]uild/
+[Dd]ebug/
+[Rr]elease/
+
+# Visual Studio / IDE
+.vs/
+.idea/
+.vscode/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# .NET generated files
+*.AssemblyInfo.cs
+*.cache
+
+# Databases (SQLite)
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+secrets.json
+appsettings.Development.json
+
+# Logs
+*.log
+logs/
+
+# Operating system
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test results and coverage
+TestResults/
+coverage/
+coverage.*
+
+# NuGet
+*.nupkg
+*.snupkg
