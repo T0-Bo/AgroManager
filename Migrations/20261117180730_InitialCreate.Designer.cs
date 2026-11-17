@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgroManager.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261017181155_AddTodo")]
-    partial class AddTodo
+    [Migration("20261117180730_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -68,6 +68,77 @@ namespace AgroManager.Migrations
                     b.ToTable("Clientes");
                 });
 
+            modelBuilder.Entity("AgroManager.Models.EntregaProgramada", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("CantidadEsperada")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("CantidadRecibida")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Estado")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("FechaProgramada")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("FechaRecepcion")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("ProveedorId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductoId");
+
+                    b.HasIndex("ProveedorId");
+
+                    b.ToTable("EntregasProgramadas");
+                });
+
+            modelBuilder.Entity("AgroManager.Models.LotePallet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<decimal>("CantidadActual")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal>("CantidadInicial")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CodigoPallet")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("FechaIngreso")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("FechaVencimiento")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("UbicacionAlmacen")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("LotePallets");
+                });
+
             modelBuilder.Entity("AgroManager.Models.Marca", b =>
                 {
                     b.Property<int>("Id")
@@ -89,17 +160,23 @@ namespace AgroManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Cantidad")
+                    b.Property<decimal>("Cantidad")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int?>("EntregaProgramadaId")
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("LotePalletId")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Motivo")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("PedidoDetalleId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("ProductoId")
@@ -108,9 +185,20 @@ namespace AgroManager.Migrations
                     b.Property<int>("Tipo")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("EntregaProgramadaId");
+
+                    b.HasIndex("LotePalletId");
+
+                    b.HasIndex("PedidoDetalleId");
+
+                    b.HasIndex("ProductoId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("MovimientoInventarios");
                 });
@@ -146,8 +234,8 @@ namespace AgroManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("Cantidad")
-                        .HasColumnType("INTEGER");
+                    b.Property<decimal>("Cantidad")
+                        .HasColumnType("TEXT");
 
                     b.Property<int>("PedidoId")
                         .HasColumnType("INTEGER");
@@ -156,9 +244,6 @@ namespace AgroManager.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ProductId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ProductoId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -176,7 +261,7 @@ namespace AgroManager.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -192,9 +277,6 @@ namespace AgroManager.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Stock")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("Unit")
                         .HasColumnType("INTEGER");
 
@@ -207,15 +289,126 @@ namespace AgroManager.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("AgroManager.Models.MovimientoInventario", b =>
+            modelBuilder.Entity("AgroManager.Models.Proveedor", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("Activo")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Direccion")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Documento")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Proveedores");
+                });
+
+            modelBuilder.Entity("AgroManager.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("AgroManager.Models.EntregaProgramada", b =>
                 {
                     b.HasOne("AgroManager.Models.Product", "Product")
-                        .WithMany("MovimientoInventarios")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithMany("EntregasProgramadas")
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AgroManager.Models.Proveedor", "Proveedor")
+                        .WithMany("EntregasProgramadas")
+                        .HasForeignKey("ProveedorId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("Proveedor");
+                });
+
+            modelBuilder.Entity("AgroManager.Models.LotePallet", b =>
+                {
+                    b.HasOne("AgroManager.Models.Product", "Product")
+                        .WithMany("LotePallets")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("AgroManager.Models.MovimientoInventario", b =>
+                {
+                    b.HasOne("AgroManager.Models.EntregaProgramada", "EntregaProgramada")
+                        .WithMany()
+                        .HasForeignKey("EntregaProgramadaId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AgroManager.Models.LotePallet", "LotePallet")
+                        .WithMany("MovimientoInventarios")
+                        .HasForeignKey("LotePalletId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AgroManager.Models.PedidoDetalle", "PedidoDetalle")
+                        .WithMany("MovimientoInventarios")
+                        .HasForeignKey("PedidoDetalleId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("AgroManager.Models.Product", "Product")
+                        .WithMany("MovimientoInventarios")
+                        .HasForeignKey("ProductoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AgroManager.Models.User", "User")
+                        .WithMany("MovimientoInventarios")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("EntregaProgramada");
+
+                    b.Navigation("LotePallet");
+
+                    b.Navigation("PedidoDetalle");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AgroManager.Models.Pedido", b =>
@@ -223,7 +416,7 @@ namespace AgroManager.Migrations
                     b.HasOne("AgroManager.Models.Cliente", "Cliente")
                         .WithMany("Pedidos")
                         .HasForeignKey("ClienteId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Cliente");
@@ -240,7 +433,7 @@ namespace AgroManager.Migrations
                     b.HasOne("AgroManager.Models.Product", "Product")
                         .WithMany("PedidoDetalles")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Pedido");
@@ -252,11 +445,14 @@ namespace AgroManager.Migrations
                 {
                     b.HasOne("AgroManager.Models.Category", "Category")
                         .WithMany("Products")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("AgroManager.Models.Marca", "Marca")
                         .WithMany("Products")
-                        .HasForeignKey("MarcaId");
+                        .HasForeignKey("MarcaId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Category");
 
@@ -273,6 +469,11 @@ namespace AgroManager.Migrations
                     b.Navigation("Pedidos");
                 });
 
+            modelBuilder.Entity("AgroManager.Models.LotePallet", b =>
+                {
+                    b.Navigation("MovimientoInventarios");
+                });
+
             modelBuilder.Entity("AgroManager.Models.Marca", b =>
                 {
                     b.Navigation("Products");
@@ -283,11 +484,30 @@ namespace AgroManager.Migrations
                     b.Navigation("PedidoDetalles");
                 });
 
+            modelBuilder.Entity("AgroManager.Models.PedidoDetalle", b =>
+                {
+                    b.Navigation("MovimientoInventarios");
+                });
+
             modelBuilder.Entity("AgroManager.Models.Product", b =>
                 {
+                    b.Navigation("EntregasProgramadas");
+
+                    b.Navigation("LotePallets");
+
                     b.Navigation("MovimientoInventarios");
 
                     b.Navigation("PedidoDetalles");
+                });
+
+            modelBuilder.Entity("AgroManager.Models.Proveedor", b =>
+                {
+                    b.Navigation("EntregasProgramadas");
+                });
+
+            modelBuilder.Entity("AgroManager.Models.User", b =>
+                {
+                    b.Navigation("MovimientoInventarios");
                 });
 #pragma warning restore 612, 618
         }

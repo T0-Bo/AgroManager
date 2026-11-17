@@ -8,8 +8,8 @@ public class LotePallet
     public Product Product { get; set; } = null!;
 
     public required string CodigoPallet { get; set;}
-    public int CantidadInicial { get; set; }
-    public int CantidadActual { get; set; }
+    public decimal CantidadInicial { get; set; }
+    public decimal CantidadActual { get; set; }
 
     public DateTime FechaIngreso { get; set; }
     public DateTime? FechaVencimiento { get; set; }

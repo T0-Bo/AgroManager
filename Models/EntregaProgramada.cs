@@ -12,8 +12,8 @@ public class EntregaProgramada
     public int ProveedorId { get; set; }
     public Proveedor Proveedor { get; set; } = null!;
 
-    public int CantidadEsperada { get; set; }
-    public int CantidadRecibida { get; set; }
+    public decimal CantidadEsperada { get; set; }
+    public decimal CantidadRecibida { get; set; }
 
     public required DateTime FechaProgramada { get; set; }
     public DateTime? FechaRecepcion { get; set; }
