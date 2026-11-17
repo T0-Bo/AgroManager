@@ -9,11 +9,12 @@ public class PedidoResponse
     public  int ClienteId { get; set; }
     public string? ClienteName { get; set; }
 
-    public required DateTime Fecha {get; set;}
+    public DateTime Fecha {get; set;}
 
     public  EstadoPedido Estado {get; set;}
 
     public  MetodoPago MetodoPago {get; set;}
+    public List<PedidoDetalleResponse> Detalles { get; set; } = new();
 
     public PedidoResponse(Pedido pedido)
     {
@@ -23,5 +24,9 @@ public class PedidoResponse
         Fecha = pedido.Fecha;
         Estado = pedido.Estado;
         MetodoPago = pedido.MetodoPago;
+
+        Detalles = pedido.PedidoDetalles
+            .Select(detalle => new PedidoDetalleResponse(detalle))
+            .ToList();
     }
 }
