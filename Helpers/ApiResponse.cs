@@ -69,5 +69,10 @@ namespace AgroManager.Helpers
 
             return new JsonResult(envelope) { StatusCode = code };
         }
+
+        internal static IActionResult Ok()
+        {
+            throw new NotImplementedException();
+        }
     }
 }   
