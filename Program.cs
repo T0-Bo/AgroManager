@@ -5,8 +5,11 @@ using System.Text.Json.Serialization;
 using AgroManager.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.Extensions.Options;
+using AgroManager.Services;
+using Microsoft.AspNetCore.Identity;
+using AgroManager.Models;
+using System.Security.Claims;
+using AgroManager.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +17,35 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services to the container.
-builder.Services.Configure<JwtOptions>(
-    builder.Configuration.GetSection("Jwt"));   
+builder.Services
+    .AddOptions<JwtOptions>()
+    .Bind(builder.Configuration.GetSection("Jwt"))
+    .Validate(options =>
+    {
+        if (string.IsNullOrWhiteSpace(options.Issuer))
+            return false;
+
+        if (string.IsNullOrWhiteSpace(options.Audience))
+            return false;
+
+        if (options.ExpirationMinutes <= 0)
+            return false;
+
+        if (string.IsNullOrWhiteSpace(options.SigningKey))
+            return false;
+
+        try
+        {
+            byte[] key = Convert.FromBase64String(options.SigningKey);
+
+            return key.Length >= 32;
+        }
+        catch (FormatException)
+        {
+            return false;
+        }
+    }, "La configuración JWT es inválida. Revisá Issuer, Audience, ExpirationMinutes y SigningKey.")
+    .ValidateOnStart();
 
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -38,11 +68,17 @@ builder.Services
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(
                 Convert.FromBase64String(jwtSettings.SigningKey)
-            )
+            ),
+
+            RoleClaimType = ClaimTypes.Role
         };
     });
 
 builder.Services.AddAuthorization();
+
+builder.Services.AddScoped<JwtTokenService>();
+builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -68,6 +104,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
+
+app.UseMiddleware<EnsureActiveUserMiddleware>();
 
 app.UseAuthorization();
 

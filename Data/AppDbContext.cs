@@ -25,6 +25,15 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+
+        // User -> configuración de nombre único
+        modelBuilder.Entity<User>()
+            .Property(u => u.Name)
+            .UseCollation("NOCASE");
+
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Name)
+            .IsUnique();
         // Cliente -> Pedido
         modelBuilder.Entity<Pedido>()
             .HasOne(p => p.Cliente)
