@@ -3,11 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using AgroManager.Models;
 using AgroManager.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AgroManager.Controllers;
 [ApiController]
 [Route("api/[controller]")]
-
+[Authorize]
 public class CategoriesController(AppDbContext db) : ControllerBase
 {
     [HttpGet]
@@ -33,6 +34,7 @@ public class CategoriesController(AppDbContext db) : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> CreateCategorie([FromBody] CategorieRequest request)
     {
 

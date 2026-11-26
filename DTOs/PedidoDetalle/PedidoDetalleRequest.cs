@@ -8,6 +8,7 @@ public class PedidoDetalleRequest
     public int ProductoId { get; set; }
 
     [Range(typeof(decimal), "0.01", "79228162514264337593543950335",
-        ErrorMessage = "La cantidad debe ser mayor que cero.")]
+        ErrorMessage = "La cantidad debe ser mayor que cero.",
+        ParseLimitsInInvariantCulture = true)]
     public decimal Cantidad { get; set; }
 }

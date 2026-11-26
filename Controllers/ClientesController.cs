@@ -4,10 +4,12 @@ using AgroManager.Models;
 using AgroManager.Data;
 using Microsoft.EntityFrameworkCore;
 using AgroManager.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AgroManager.Controllers;
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class ClientesController(AppDbContext db) : ControllerBase
 {
     [HttpGet]
@@ -80,7 +82,7 @@ public class ClientesController(AppDbContext db) : ControllerBase
     }
 
     [HttpDelete("{id}")]
-
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> EliminarCliente( int id)
     {
         var cliente = await db.Clientes.FirstOrDefaultAsync(c => c.Id == id);

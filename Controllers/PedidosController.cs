@@ -6,10 +6,12 @@ using AgroManager.Data;
 using Microsoft.EntityFrameworkCore;
 using AgroManager.Enums;
 using AgroManager.Helpers;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AgroManager.Controllers;
 [ApiController]
 [Route("api/[controller]")]
+[Authorize]
 public class PedidosController(AppDbContext db) : ControllerBase
 {
     [HttpGet]
